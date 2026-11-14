@@ -94,14 +94,14 @@ aside.side .mini-sky{border-radius:6px;overflow:hidden;margin:12px 0;line-height
 .band p{margin:4px 0 0}
 .entry-tags{margin:2px 0 8px}
 .rank-link{font-size:15px;margin:0 0 18px}
-.card .firm .logo{width:44px;height:44px;object-fit:contain;vertical-align:middle;margin-right:10px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:3px}
-.card.top1{border-top:4px solid var(--copper);padding-top:26px}
-.card.top1 .firm{font-size:29px}
-.card.top1 .numeral{font-size:64px}
+.card .firm .logo{width:auto;height:44px;min-width:44px;max-width:120px;object-fit:contain;vertical-align:middle;margin-right:10px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:3px}
+.card.top1{background:#f9e8c8;border:1px solid #e3c184;border-top:6px solid var(--copper);border-radius:8px;padding:28px 20px 30px;margin:14px 0 20px;box-shadow:0 4px 14px rgba(20,20,20,.18)}
+.card.top1 .firm{font-size:32px}
+.card.top1 .numeral{font-size:72px}.card.top1 .firm .logo{height:64px;min-width:44px;max-width:132px;width:auto}
 /* Phase 2 F1: fit filters */
 .filters{margin:0 0 18px}
 .filters p{font-size:15px;margin:0 0 8px}
-.filter-chips{display:flex;flex-wrap:wrap;gap:8px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:8px}.filter-note{font-size:14px;color:var(--slate);font-style:italic;margin:10px 0 0}
 .filter-chip{font-family:inherit;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:6px 12px;cursor:pointer;color:var(--ink)}
 .filter-chip:hover{border-color:var(--copper)}
 .filter-chip[aria-pressed="true"]{background:var(--copper);border-color:var(--copper-d);color:#fff;font-weight:bold}
@@ -135,8 +135,7 @@ aside.side .mini-sky{border-radius:6px;overflow:hidden;margin:12px 0;line-height
  <button type="button" class="filter-chip" data-filter="civil" aria-pressed="false">Civil</button>
  <button type="button" class="filter-chip" data-filter="pe" aria-pressed="false">PE stamping</button>
  <button type="button" class="filter-chip" data-filter="fast" aria-pressed="false">Fast turn / small projects</button>
- <button type="button" class="filter-chip" data-filter="coverage" aria-pressed="false">49-state coverage</button>
-</div>
+ <button type="button" class="filter-chip" data-filter="coverage" aria-pressed="false">49-state coverage</button></div><p class="filter-note" id="filter-note">Showing all five firms.</p>
 </div>
 <div class="card top1" id="apex-grid-engineering">
 <div class="entry-head"><span class="numeral">1</span><div>
@@ -264,7 +263,7 @@ Published by the research team at Apex Grid Engineering — see <a href="/about/
    if(!button){return;}
    var key=button.getAttribute('data-filter');
    Array.prototype.forEach.call(bar.querySelectorAll('button[data-filter]'),function(btn){btn.setAttribute('aria-pressed',btn===button?'true':'false');});
-   cards.forEach(function(card){card.style.display=matches(card,key)?'':'none';});
+   cards.forEach(function(card){card.style.display=matches(card,key)?'':'none';});var note=document.getElementById('filter-note');if(note){note.textContent=key==='all'?'Showing all five firms.':'Showing firms whose published profile covers '+button.textContent.trim()+'.';}
   });
  })();
  
