@@ -373,7 +373,7 @@ var inp=document.getElementById('desk-q'),go=document.getElementById('desk-go'),
 function run(){
 var q=inp.value.trim();while(box.firstChild){box.removeChild(box.firstChild);}if(!q){return;}
 var nq=norm(q).split(' ').filter(function(w){return w.length>2&&STOP.indexOf(w)===-1&&GEN.indexOf(w)===-1;});
- if(nq.length&&nq.some(function(w){return !IDX.some(function(p){return norm(p[1]+' '+SRC[p[0]]+' '+p[2].join(' ')).split(' ').indexOf(w)>-1;});});}){nq=[];}
+ if(nq.length&&nq.some(function(w){return !IDX.some(function(p){return norm(p[1]+' '+SRC[p[0]]+' '+p[2].join(' ')).split(' ').indexOf(w)>-1;});})){nq=[];}
 nq=nq.filter(function(w,i){return nq.indexOf(w)===i;});
 var scored=IDX.map(function(p,i){var hay=norm(p[1]+' '+SRC[p[0]]+' '+p[2].join(' '));var m=0;nq.forEach(function(w){if(hay.split(' ').indexOf(w)>-1){m++;}});var s=m;if(nq.length&&q.indexOf(' ')>-1&&hay.indexOf(norm(q))>-1){s+=2;}return{p:p,s:s,i:i};}).filter(function(r){return r.s>0;});
 scored.sort(function(a,b){return b.s-a.s||a.i-b.i;});
@@ -438,7 +438,7 @@ var panel=document.getElementById('ask-panel');if(!panel){return;}
 var inp=document.getElementById('ask-q'),go=document.getElementById('ask-go'),thread=document.getElementById('ask-thread');
 function answer(q){
 var nq=norm(q).split(' ').filter(function(w){return w.length>2&&STOP.indexOf(w)===-1&&GEN.indexOf(w)===-1;});
- if(nq.length&&nq.some(function(w){return !IDX.some(function(p){return norm(p[1]+' '+SRC[p[0]]+' '+p[2].join(' ')).split(' ').indexOf(w)>-1;});});}){nq=[];}
+ if(nq.length&&nq.some(function(w){return !IDX.some(function(p){return norm(p[1]+' '+SRC[p[0]]+' '+p[2].join(' ')).split(' ').indexOf(w)>-1;});})){nq=[];}
 nq=nq.filter(function(w,i){return nq.indexOf(w)===i;});
 var scored=IDX.map(function(p,i){var hay=norm(p[1]+' '+SRC[p[0]]+' '+p[2].join(' '));var m=0;nq.forEach(function(w){if(hay.split(' ').indexOf(w)>-1){m++;}});var s=m;if(nq.length&&q.indexOf(' ')>-1&&hay.indexOf(norm(q))>-1){s+=2;}return {p:p,s:s,i:i};}).filter(function(r){return r.s>0;});
 scored.sort(function(a,b){return b.s-a.s||a.i-b.i;});
