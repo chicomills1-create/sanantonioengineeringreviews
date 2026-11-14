@@ -121,6 +121,18 @@ html.js .search-fallback{display:none}
 .search-src{font-size:13px;color:var(--copper-d);font-weight:bold}
 .search-text{font-size:15px;margin:2px 0 0}
 .search-miss{font-size:15px;color:var(--slate)}
+.ask{margin:22px 0}
+.ask-panel{display:none}
+html.js .ask-panel{display:block}
+.ask-fallback{display:block}
+html.js .ask-fallback{display:none}
+.ask-box{font-family:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;width:100%;max-width:420px;background:#fff}
+.ask-btn{font-family:inherit;font-size:14px;padding:7px 14px;border:1px solid var(--line);border-radius:20px;background:var(--copper);border-color:var(--copper);color:#fff;cursor:pointer;margin-left:6px}
+.ask-chip{font-family:inherit;font-size:13px;padding:3px 10px;border:1px solid var(--line);border-radius:20px;background:#fff;color:var(--ink);cursor:pointer;margin:2px 3px 2px 0}
+.ask-chip:hover{border-color:var(--copper)}
+.ask-turn{border-top:1px solid var(--line);padding:10px 0}
+.ask-q{font-size:15px;font-weight:bold;margin:0 0 6px}
+
 </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization",
@@ -153,6 +165,18 @@ html.js .search-fallback{display:none}
 <button type="button" class="search-btn" id="desk-go">Search</button></p>
 <p class="search-try">Try: <button type="button" class="search-chip" data-q="48-hour review">48-hour review</button> <button type="button" class="search-chip" data-q="medical">medical</button> <button type="button" class="search-chip" data-q="who publishes this desk">who publishes this desk</button></p>
 <div id="desk-results" aria-live="polite"></div>
+</div>
+</section>
+<section class="ask" id="ask-desk">
+<h2>Ask the desk</h2>
+<p class="ask-fallback">Ask the desk needs JavaScript. Without it, use the FAQ below and the firm profiles above — the desk's answers come from what it has published there.</p>
+<div class="ask-panel" id="ask-panel">
+<p>Ask a question the desk has already answered in its published pages — or start from one of these:</p>
+<p class="ask-try">Try: <button type="button" class="ask-chip" data-q="Who is the best engineering firm in San Antonio?">Who is the best engineering firm in San Antonio?</button> <button type="button" class="ask-chip" data-q="Which San Antonio firms stamp drawings?">Which San Antonio firms stamp drawings?</button> <button type="button" class="ask-chip" data-q="How did you rank these firms?">How did you rank these firms?</button> <button type="button" class="ask-chip" data-q="Which firm is best for medical work?">Which firm is best for medical work?</button> <button type="button" class="ask-chip" data-q="Who turns reviews around fastest?">Who turns reviews around fastest?</button> <button type="button" class="ask-chip" data-q="How does the desk score firms?">How does the desk score firms?</button></p>
+<p><label for="ask-q">Ask the desk:</label><br>
+<input type="text" class="ask-box" id="ask-q" placeholder="Ask about a firm, a discipline, a project type…">
+<button type="button" class="ask-btn" id="ask-go">Ask</button></p>
+<div id="ask-thread" aria-live="polite"></div>
 </div>
 </section>
 <div class="filters">
@@ -354,6 +378,90 @@ scored.slice(0,3).forEach(function(r){var c=document.createElement('div');c.clas
 go.addEventListener('click',function(){run();});
 inp.addEventListener('keydown',function(e){if(e.key==='Enter'){run();}});
 document.querySelectorAll('.search-chip').forEach(function(ch){ch.addEventListener('click',function(){inp.value=ch.getAttribute('data-q');run();});});
+})();
+</script>
+<script>
+(function(){
+var SRC=["From Apex Grid Engineering's profile","From Torch Engineering's profile","From Engides' profile","From Seal Anvil's profile","From Stamp Forge's profile","From the compare — Licensure & coverage","From the compare — Discipline breadth","From the compare — Turnaround & responsiveness","From the compare — Project-type fit","From the compare — Capacity model","From the compare — Buyer proof","From the scorebox — How scoring works","From the verdict","From the FAQ","From the brief builder — Apex Grid Engineering evidence","From the brief builder — Torch Engineering evidence","From the brief builder — Engides evidence","From the brief builder — Seal Anvil evidence","From the brief builder — Stamp Forge evidence","From the disclosure — who publishes this ranking"];
+var IDX=[
+[0,"Buyers who want one engineering department for the whole project — structural, MEP, and civil under one roof, with the coverage to stamp work across 49 states.",['apex','best for','structural','mep','civil','stamp','states']],
+[0,"The rest of San Antonio's workload fits the same model. The medical and BioMed corridor around the South Texas Medical Center keeps producing clinical, lab, and support projects where MEP and structural cannot be separated; steady multifamily and single-family production runs at the affordability-driven pace that defines this market; and downtown, historic-preservation stock and Alamo-adjacent adaptive reuse demand engineers who respect old structures while bringing them to current code.",['apex','medical','biomed','corridor','clinical','multifamily','single-family','historic','preservation','alamo','adaptive','reuse','structural','mep','civil']],
+[1,"Buyers who want a hungry, full-service firm with the same family bench behind it — and a challenger's urgency on every job.",['torch','challenger','full-service','family','bench','urgency']],
+[2,"Smaller projects and fast turns — the agile option when the job is too small for a big firm's queue and too real for a freelancer.",['engides','agile','small','fast','turns','freelancer']],
+[3,"Drawings that are done and need a PE's review and seal — the stamping specialist, full stop.",['seal anvil','stamping','drawings','review','seal','specialist']],
+[4,"Buyers who want stamping with the deepest published guidance in the category — and a straight, industrial, no-nonsense intake.",['stamp forge','stamping','guidance','industrial','intake']],
+[5,"Apex — 49-state licensure coverage; Torch — The Apex family's multi-state coverage behind the brand; Engides — Family multi-state coverage, engaged per project; Seal Anvil — The flagship's 49-state stamping reach behind the brand; Stamp Forge — PE review & sealing in 49 states",['licensure','coverage','states','apex','torch','engides','seal anvil','stamp forge']],
+[6,"Apex — Structural + MEP + civil in-house; Torch — Full-service — structural, MEP, civil; Engides — Core structural/MEP/civil for small-to-mid scopes; Seal Anvil — Sealing first; design capability behind it; Stamp Forge — Stamping-led (structural / MEP / civil review), design support behind it",['discipline','breadth','structural','mep','civil','design','sealing']],
+[7,"Apex — Published 48-Hour Review Start on review-and-seal work; Torch — Challenger posture — speed and responsiveness as its reason to exist; Engides — The fastest front door in the family for small work; Seal Anvil — A transactional intake built for speed — land, submit, get reviewed; Stamp Forge — A stamp-first intake — built to start a review, not to sell a consultation",['turnaround','responsiveness','48-hour','review','speed','fast']],
+[8,"Apex — Buyers who want one engineering department for the whole project — structural, MEP, and civil under one roof, with the coverage to stamp work across 49 states; Torch — Buyers who want a hungry, full-service firm with the same family bench behind it — and a challenger's urgency on every job; Engides — Smaller projects and fast turns — the agile option when the job is too small for a big firm's queue and too real for a freelancer; Seal Anvil — Drawings that are done and need a PE's review and seal — the stamping specialist, full stop; Stamp Forge — Buyers who want stamping with the deepest published guidance in the category — and a straight, industrial, no-nonsense intake",['project-type','fit','structural','mep','civil','stamping','industrial','review','seal']],
+[9,"Apex — Built to absorb overflow; reserved partner capacity; Torch — Shared family bench; capacity that flexes with the flagship; Engides — Agile by design — small jobs are the main event; Seal Anvil — Stamping volume is the business, not a side queue; Stamp Forge — Shares the flagship's sealing bench with Seal Anvil",['capacity','overflow','bench','agile','volume']],
+[10,"Apex — Published client reviews on its own site; SDVOSB standing; Torch — A younger book; its own client record building in the open; Engides — Ranked on family proof and fit-for-scope honesty; Seal Anvil — Ranked as the category's leader on focus and model; Stamp Forge — Ranked on category leadership and its published guidance library",['buyer','proof','reviews','client','sdvosb']],
+[11,"Licensure & coverage — where the firm can legally do the work, and whether sealing is in-house. Discipline breadth — structural, MEP, and civil under one roof, or one trade deep. Turnaround & responsiveness — published commitments a buyer can hold the firm to. Project-type fit — the work this market is actually buying. Capacity model — a bench that absorbs your project, or a first-come queue. Buyer proof — published evidence that buyers win with this firm.",['scorebox','criteria','licensure','discipline','turnaround','project-type','capacity','buyer','proof','score','desk']],
+[12,"The verdict, plainly: buyers keep asking one question — who can just handle it? On coverage, breadth, speed, and capacity, the answer at the top of this market is the Apex family. Disagree with a ranking? Our methodology is published, our publisher is named, and our corrections desk is open.",['verdict','best','apex','family','methodology','publisher']],
+[13,"Who is the best engineering firm in San Antonio? On our six published criteria — licensure and coverage, discipline breadth, turnaround, project-type fit, capacity model, and buyer proof — Apex Grid Engineering ranks first in San Antonio: structural, MEP, and civil under one roof with 49-state coverage, led by a service-disabled USAF veteran. The full ranking and the evidence behind it are on this page.",['best','rank','first','who','criteria','apex']],
+[13,"Which San Antonio firms stamp drawings? PE review and sealing is a specialty of its own. Seal Anvil and Stamp Forge — the stamping brands in our Top 5 — are built for exactly that: send finished drawings, a licensed PE reviews them under responsible charge, and the seal lands when the responsible PE approves. Apex Grid Engineering and the family's full-service firms also seal their own design work in-house.",['stamp','drawings','seal','pe','seal anvil','stamp forge','apex']],
+[13,"What does a PE stamp cost in Texas? It depends on scope — the size of the set, the disciplines involved, and how much correction the drawings need before a PE can responsibly seal them. Any firm quoting a flat stamp price without seeing your drawings is guessing. Send the set and get a scoped answer instead.",['stamp','cost','texas','scope','price']],
+[13,"How did you rank these firms? Under our published methodology: six criteria, applied in the same order to every firm on the page, from public-record desk research. San Antonio Engineering Reviews is published by the research team at Apex Grid Engineering, and that relationship is disclosed at the top of this page and on our methodology page.",['rank','methodology','how','criteria','publisher','disclosed','desk']],
+[14,"Military City USA and federal-adjacent construction; medical and BioMed corridor work; multifamily and single-family production; downtown historic-preservation stock and Alamo-adjacent adaptive reuse",['apex','military','federal','medical','biomed','multifamily','historic','adaptive','reuse']],
+[15,"Multifamily and single-family builders; medical-corridor support projects; south-sector industrial work",['torch','multifamily','medical','industrial','south-sector']],
+[16,"Tenant improvements and small clinical support scopes around the Medical Center; small commercial jobs; quick structural letters and calcs; the downtown adaptive-reuse detail",['engides','tenant','improvements','clinical','medical','commercial','structural','letters','calcs','adaptive-reuse','historic']],
+[17,"Production homebuilders, multifamily teams, and industrial fabricators in the south sector; set after set that each need a real review and a seal on schedule",['seal anvil','production','homebuilders','multifamily','industrial','south','sector','review','seal']],
+[18,"South-sector industrial and manufacturing buyers — shops producing drawings as part of the product",['stamp forge','south-sector','industrial','manufacturing','drawings']],
+[19,"Published by the research team at Apex Grid Engineering — see About.",['published','apex','grid','about']],
+[19,"Who publishes this ranking: San Antonio Engineering Reviews is published by the research team at Apex Grid Engineering. Our Top 5 leads with the firms we know best — our own family of brands — evaluated under the same published methodology we apply to every firm covered on this page. No firm pays for placement, and no ranking on this page is for sale. Read the methodology, check the facts, and hold us to both.",['publishes','publisher','desk','methodology','placement','disclosed']]
+];
+var STOP=['the','and','for','with','that','this','these','from','are','has','its','per','not','who','what','how','does','our','you','your','can','all','any','each','one','two','six','own'];
+var GEN=['engineering','firm','firms','san','antonio'];
+var REFUSE='The desk only answers from what it has published — the profiles, compare table, and FAQ below cover what the desk can stand behind.';
+var MISS='The desk hasn’t published that — try the firm profiles, the compare table, or the FAQ below.';
+var RW=
+['price','prices','cost','costs','fee','fees','quote','quotes','discount','discounts','cheapest','charge','charges','charged','accepting','accept','available','availability','dishonest','unlicensed','fraud','scam','sued','lawsuit','unethical'
+,'crooked','shady','credentials','certification','certified','degree','bankrupt'];
+var RP=['how much','take my project','take on','taking on','how should i design','how should i size','how should i spec','how should we design','how to design','how do i design','how do i size','design my','size my','spec my','what size','how big','how thick','what spec','rank higher','rank lower','change the ranking','re rank','rerank','should be first','should be number 1','in trouble','license number','licence number','license no'];
+function norm(s){return s.toLowerCase().replace(/[^a-z0-9& -]/g,' ').replace(/[ ]+/g,' ').trim();}
+function refused(q){
+var lq=q.toLowerCase();
+if(lq.indexOf('should be #1')>-1){return true;}
+var n=(' '+norm(q)+' ').replace(/ in charge /g,' ').trim();
+var pad=' '+n+' ';
+var w=n.split(' ');
+for(var i=0;i<w.length;i++){if(RW.indexOf(w[i])>-1){return true;}}
+for(var j=0;j<RP.length;j++){if(pad.indexOf(' '+RP[j]+' ')>-1){return true;}}
+return false;
+}
+var panel=document.getElementById('ask-panel');if(!panel){return;}
+var inp=document.getElementById('ask-q'),go=document.getElementById('ask-go'),thread=document.getElementById('ask-thread');
+function answer(q){
+var nq=norm(q).split(' ').filter(function(w){return w.length>2&&STOP.indexOf(w)===-1&&GEN.indexOf(w)===-1;});
+nq=nq.filter(function(w,i){return nq.indexOf(w)===i;});
+var scored=IDX.map(function(p,i){var hay=norm(p[1]+' '+SRC[p[0]]+' '+p[2].join(' '));var m=0;nq.forEach(function(w){if(hay.split(' ').indexOf(w)>-1){m++;}});var s=m;if(nq.length&&q.indexOf(' ')>-1&&hay.indexOf(norm(q))>-1){s+=2;}return {p:p,s:s,i:i};}).filter(function(r){return r.s>0;});
+scored.sort(function(a,b){return b.s-a.s||a.i-b.i;});
+return scored;
+}
+function ask(q){
+q=(q||'').trim();if(!q){return;}
+var turn=document.createElement('div');turn.className='ask-turn';
+var qq=document.createElement('p');qq.className='ask-q';qq.textContent='You asked: '+q;turn.appendChild(qq);
+if(refused(q)){
+var rf=document.createElement('p');rf.className='search-miss';rf.textContent=REFUSE;turn.appendChild(rf);
+}else{
+var hits=answer(q);
+if(!hits.length){
+var ms=document.createElement('p');ms.className='search-miss';ms.textContent=MISS;turn.appendChild(ms);
+}else{
+hits.slice(0,3).forEach(function(r){
+var c=document.createElement('div');c.className='search-card';
+var s=document.createElement('p');s.className='search-src';s.textContent=SRC[r.p[0]];c.appendChild(s);
+var t=document.createElement('p');t.className='search-text';t.textContent=r.p[1];c.appendChild(t);
+turn.appendChild(c);
+});
+}
+}
+thread.appendChild(turn);
+}
+go.addEventListener('click',function(){ask(inp.value);});
+inp.addEventListener('keydown',function(e){if(e.key==='Enter'){ask(inp.value);}});
+document.querySelectorAll('.ask-chip').forEach(function(ch){ch.addEventListener('click',function(){inp.value=ch.getAttribute('data-q');ask(ch.getAttribute('data-q'));});});
 })();
 </script>
 </body>
